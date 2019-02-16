@@ -18,7 +18,8 @@ public class AuthenticationController
     private final AuthenticationService authenticationService;
     private final ModelMapper modelMapper;
 
-    @PostMapping
+    // TODO: Fix this request. It need to be POST, but we already have POST at this URL from spring security. For now is set to PUT, but need to be changed.
+    @PutMapping
     public ResponseEntity<?> postAuthentication(@Validated(value = {RequestDataValidator.PostAuthentication.class}) @RequestBody AuthenticationDto authenticationDtoToPost) throws Exception
     {
         return new ResponseEntityWrapper<>(authenticationService.postAuthentication(modelMapper.map(authenticationDtoToPost, UserEntity.class)));

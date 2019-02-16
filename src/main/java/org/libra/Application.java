@@ -6,7 +6,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @EnableJpaRepositories
-@SpringBootApplication(scanBasePackages = "com.*")
+@SpringBootApplication(scanBasePackages = "org.libra.*")
 public class Application extends SpringBootServletInitializer
 {
     public static void main(String[] args)

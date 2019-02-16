@@ -66,7 +66,7 @@ public class AuthenticationService
         {
             responseEntity = new ResponseEntity<>(userRepository.findUserEntityByEmail(authorityUtility.getCurrentAuthenticationEmail()), httpHeaders, HttpStatus.OK);
         }
-        else if ((status != null) && (status.equals("invalidAuthenticationData")))
+        else if ((status != null) && (status.equals("invalid")))
         {
             throw new BadCredentialsException("Invalid authentication data");
         }

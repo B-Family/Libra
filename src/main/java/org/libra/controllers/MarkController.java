@@ -18,7 +18,7 @@ public class MarkController
     private final MarkService markService;
     private final ModelMapper modelMapper;
 
-    @PutMapping
+    @PostMapping
     public ResponseEntity<?> postMark(@Validated(value = {RequestDataValidator.PostMark.class}) @RequestBody MarkDto markDtoToPost) throws Exception
     {
         return new ResponseEntityWrapper<>(markService.postMark(modelMapper.map(markDtoToPost, MarkEntity.class)));
