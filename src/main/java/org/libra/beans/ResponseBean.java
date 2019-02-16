@@ -13,7 +13,6 @@ public class ResponseBean
 
     @JsonIgnore
     private HttpStatus status;
-
     private Object response;
 
     public HttpHeaders getHeaders()

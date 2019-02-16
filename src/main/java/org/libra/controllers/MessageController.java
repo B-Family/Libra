@@ -18,16 +18,16 @@ public class MessageController
     private final MessageService messageService;
     private final ModelMapper modelMapper;
 
+    @PostMapping
+    public ResponseEntity<?> postMessage(@Validated(value = {RequestDataValidator.PostMessage.class}) @RequestBody MessageDto messageDtoToPost) throws Exception
+    {
+        return new ResponseEntityWrapper<>(messageService.postMessage(modelMapper.map(messageDtoToPost, MessageEntity.class)));
+    }
+
     @PutMapping
     public ResponseEntity<?> putMessage(@Validated(value = {RequestDataValidator.PutMessage.class}) @RequestBody MessageDto messageDtoToPut) throws Exception
     {
         return new ResponseEntityWrapper<>(messageService.putMessage(modelMapper.map(messageDtoToPut, MessageEntity.class)));
-    }
-
-    @PatchMapping
-    public ResponseEntity<?> patchMessage(@Validated(value = {RequestDataValidator.PatchMessage.class}) @RequestBody MessageDto messageDtoToPatch) throws Exception
-    {
-        return new ResponseEntityWrapper<>(messageService.patchMessage(modelMapper.map(messageDtoToPatch, MessageEntity.class)));
     }
 
     @DeleteMapping(value = {"", "/{id}"})

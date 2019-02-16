@@ -18,10 +18,10 @@ public class ParticipantController
     private final ParticipantService participantService;
     private final ModelMapper modelMapper;
 
-    @PutMapping
-    public ResponseEntity<?> putParticipant(@Validated(value = {RequestDataValidator.PutParticipant.class}) @RequestBody ParticipantDto participantDtoToPut) throws Exception
+    @PostMapping
+    public ResponseEntity<?> postParticipant(@Validated(value = {RequestDataValidator.PostParticipant.class}) @RequestBody ParticipantDto participantDtoToPost) throws Exception
     {
-        return new ResponseEntityWrapper<>(participantService.putParticipant(modelMapper.map(participantDtoToPut, ParticipantEntity.class)));
+        return new ResponseEntityWrapper<>(participantService.postParticipant(modelMapper.map(participantDtoToPost, ParticipantEntity.class)));
     }
 
     @DeleteMapping(value = "/{id}")

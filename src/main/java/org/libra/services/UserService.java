@@ -1,8 +1,8 @@
 package org.libra.services;
 
-import org.libra.beans.utilities.AuthorityUtilityBean;
+import org.libra.beans.utilities.AuthorityUtility;
 import org.libra.beans.ResponseBean;
-import org.libra.beans.utilities.ServiceUtilityBean;
+import org.libra.beans.utilities.ServiceUtility;
 import org.libra.entities.implementation.UserAuthorityEntity;
 import org.libra.entities.implementation.UserEntity;
 import org.libra.exceptions.AccessDeniedException;
@@ -20,8 +20,8 @@ import java.util.Optional;
 @Service
 public class UserService
 {
-    private final AuthorityUtilityBean authorityUtilityBean;
-    private final ServiceUtilityBean serviceUtilityBean;
+    private final AuthorityUtility authorityUtility;
+    private final ServiceUtility serviceUtility;
     private final UserRepository userRepository;
     private final ResponseBean responseBean;
     private final HttpHeaders httpHeaders;
@@ -35,17 +35,17 @@ public class UserService
         return userEntity;
     }
 
-    public ResponseBean putUser(UserEntity userEntity) throws Exception
+    public ResponseBean postUser(UserEntity userEntity) throws Exception
     {
         Optional<UserEntity> optionalUserEntity = userRepository.findUserEntityByEmail(userEntity.getEmail());
         if (!optionalUserEntity.isPresent())
         {
-            if (authorityUtilityBean.validateAdminAuthority())
+            if (authorityUtility.validateAdminAuthority())
             {
-                userRepository.save(serviceUtilityBean.encodeUserEntityPassword(setUserEntityNestedAuthorityEmails(userEntity)));
+                userRepository.save(serviceUtility.encodeUserEntityPassword(setUserEntityNestedAuthorityEmails(userEntity)));
                 responseBean.setHeaders(httpHeaders);
                 responseBean.setStatus(HttpStatus.CREATED);
-                responseBean.setResponse("User with email: '" + userEntity.getEmail() + "' successfully putted");
+                responseBean.setResponse("User with email: '" + userEntity.getEmail() + "' successfully added");
             }
             else
             {
@@ -72,19 +72,19 @@ public class UserService
         }
         return responseEntity;
     }
-    public ResponseBean patchUser(UserEntity userEntity) throws Exception
+    public ResponseBean putUser(UserEntity userEntity) throws Exception
     {
         Optional<UserEntity> optionalUserEntity = userRepository.findUserEntityByEmail(userEntity.getEmail());
         if (optionalUserEntity.isPresent())
         {
-            if (authorityUtilityBean.getCurrentAuthenticationEmail().equals(userEntity.getEmail())
-                    || authorityUtilityBean.validateAdminAuthority())
+            if (authorityUtility.getCurrentAuthenticationEmail().equals(userEntity.getEmail())
+                    || authorityUtility.validateAdminAuthority())
             {
-                userRepository.save(serviceUtilityBean.encodeUserEntityPassword(serviceUtilityBean
+                userRepository.save(serviceUtility.encodeUserEntityPassword(serviceUtility
                         .patchEntity(optionalUserEntity.get(), userEntity)));
                 responseBean.setHeaders(httpHeaders);
                 responseBean.setStatus(HttpStatus.OK);
-                responseBean.setResponse("User with email: '" + userEntity.getEmail() + "' successfully patched");
+                responseBean.setResponse("User with email: '" + userEntity.getEmail() + "' successfully modified");
             }
             else
             {
@@ -102,16 +102,16 @@ public class UserService
         Optional<UserEntity> optionalUserEntity = userRepository.findUserEntityByEmail(email);
         if (optionalUserEntity.isPresent())
         {
-            if (!authorityUtilityBean.getCurrentAuthenticationEmail().equals(email)
-                    && authorityUtilityBean.validateAdminAuthority())
+            if (!authorityUtility.getCurrentAuthenticationEmail().equals(email)
+                    && authorityUtility.validateAdminAuthority())
             {
                 userRepository.deleteUserEntityByEmail(email);
                 responseBean.setHeaders(httpHeaders);
                 responseBean.setStatus(HttpStatus.OK);
                 responseBean.setResponse("User with email: '" + email + "' successfully deleted");
             }
-            else if (authorityUtilityBean.getCurrentAuthenticationEmail().equals(email)
-                    && authorityUtilityBean.validateAdminAuthority())
+            else if (authorityUtility.getCurrentAuthenticationEmail().equals(email)
+                    && authorityUtility.validateAdminAuthority())
             {
                 throw new SelfDestructionException("You cannot delete yourself");
             }
@@ -128,11 +128,11 @@ public class UserService
     }
 
     @Autowired
-    public UserService(AuthorityUtilityBean authorityUtilityBean, ServiceUtilityBean serviceUtilityBean,
+    public UserService(AuthorityUtility authorityUtility, ServiceUtility serviceUtility,
                        UserRepository userRepository, ResponseBean responseBean, HttpHeaders httpHeaders)
     {
-        this.authorityUtilityBean = authorityUtilityBean;
-        this.serviceUtilityBean = serviceUtilityBean;
+        this.authorityUtility = authorityUtility;
+        this.serviceUtility = serviceUtility;
         this.userRepository = userRepository;
         this.responseBean = responseBean;
         this.httpHeaders = httpHeaders;

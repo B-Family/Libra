@@ -1,9 +1,9 @@
 package org.libra.services;
 
-import org.libra.beans.utilities.AuthorityUtilityBean;
+import org.libra.beans.utilities.AuthorityUtility;
 import org.libra.beans.ResponseBean;
-import org.libra.beans.utilities.EmailUtilityBean;
-import org.libra.beans.utilities.ServiceUtilityBean;
+import org.libra.beans.utilities.EmailUtility;
+import org.libra.beans.utilities.ServiceUtility;
 import org.libra.entities.implementation.PresentationEntity;
 import org.libra.exceptions.AccessDeniedException;
 import org.libra.exceptions.DuplicatedEntryException;
@@ -21,9 +21,9 @@ import java.util.Optional;
 @Service
 public class PresentationService
 {
-    private final AuthorityUtilityBean authorityUtilityBean;
-    private final EmailUtilityBean emailUtilityBean;
-    private final ServiceUtilityBean serviceUtilityBean;
+    private final AuthorityUtility authorityUtility;
+    private final EmailUtility emailUtility;
+    private final ServiceUtility serviceUtility;
     private final PresentationRepository presentationRepository;
     private final ResponseBean responseBean;
     private final HttpHeaders httpHeaders;
@@ -59,14 +59,14 @@ public class PresentationService
         }
     }
 
-    public ResponseBean putPresentation(PresentationEntity presentationEntity) throws Exception
+    public ResponseBean postPresentation(PresentationEntity presentationEntity) throws Exception
     {
         Optional<PresentationEntity> optionalUserEntity = presentationRepository.findPresentationEntityByTitle(presentationEntity.getTitle());
         if (!optionalUserEntity.isPresent())
         {
             if (presentationEntity.getStartDate().before(presentationEntity.getEndDate()))
             {
-                presentationRepository.save(serviceUtilityBean.setAuthenticatedEmailPropertyValue(presentationEntity));
+                presentationRepository.save(serviceUtility.setAuthenticatedEmailPropertyValue(presentationEntity));
                 responseBean.setHeaders(httpHeaders);
                 responseBean.setStatus(HttpStatus.CREATED);
                 responseBean.setResponse("Presentation with title: '" + presentationEntity.getTitle() + "' successfully added");
@@ -96,20 +96,20 @@ public class PresentationService
         }
         return responseEntity;
     }
-    public ResponseBean patchPresentation(PresentationEntity presentationEntity) throws Exception
+    public ResponseBean putPresentation(PresentationEntity presentationEntity) throws Exception
     {
         Optional<PresentationEntity> optionalPresentationEntity = presentationRepository.findPresentationEntityById(presentationEntity.getId());
         if (optionalPresentationEntity.isPresent())
         {
-            if (authorityUtilityBean.getCurrentAuthenticationEmail().equals(optionalPresentationEntity.get().getEmail())
-                    || authorityUtilityBean.validateAdminAuthority())
+            if (authorityUtility.getCurrentAuthenticationEmail().equals(optionalPresentationEntity.get().getEmail())
+                    || authorityUtility.validateAdminAuthority())
             {
                 if (validatePresentationEntityDateAndTime(optionalPresentationEntity.get(), presentationEntity))
                 {
-                    presentationRepository.save(serviceUtilityBean.patchEntity(optionalPresentationEntity.get(), presentationEntity));
+                    presentationRepository.save(serviceUtility.patchEntity(optionalPresentationEntity.get(), presentationEntity));
                     responseBean.setHeaders(httpHeaders);
                     responseBean.setStatus(HttpStatus.OK);
-                    responseBean.setResponse("Presentation with id: '" + presentationEntity.getId() + "' successfully patched");
+                    responseBean.setResponse("Presentation with id: '" + presentationEntity.getId() + "' successfully modified");
                 }
                 else
                 {
@@ -132,10 +132,10 @@ public class PresentationService
         Optional<PresentationEntity> optionalPresentationEntity = presentationRepository.findPresentationEntityById(id);
         if (optionalPresentationEntity.isPresent())
         {
-            if (authorityUtilityBean.getCurrentAuthenticationEmail().equals(optionalPresentationEntity.get().getEmail())
-                    || authorityUtilityBean.validateAdminAuthority())
+            if (authorityUtility.getCurrentAuthenticationEmail().equals(optionalPresentationEntity.get().getEmail())
+                    || authorityUtility.validateAdminAuthority())
             {
-                emailUtilityBean.sendDeletePresentationNotificationEmails(optionalPresentationEntity.get());
+                emailUtility.sendDeletePresentationNotificationEmails(optionalPresentationEntity.get());
                 presentationRepository.deletePresentationEntityById(id);
                 responseBean.setHeaders(httpHeaders);
                 responseBean.setStatus(HttpStatus.OK);
@@ -154,13 +154,13 @@ public class PresentationService
     }
 
     @Autowired
-    public PresentationService(AuthorityUtilityBean authorityUtilityBean, EmailUtilityBean emailUtilityBean, ServiceUtilityBean serviceUtilityBean,
+    public PresentationService(AuthorityUtility authorityUtility, EmailUtility emailUtility, ServiceUtility serviceUtility,
                                PresentationRepository presentationRepository,
                                ResponseBean responseBean, HttpHeaders httpHeaders)
     {
-        this.authorityUtilityBean = authorityUtilityBean;
-        this.emailUtilityBean = emailUtilityBean;
-        this.serviceUtilityBean = serviceUtilityBean;
+        this.authorityUtility = authorityUtility;
+        this.emailUtility = emailUtility;
+        this.serviceUtility = serviceUtility;
         this.presentationRepository = presentationRepository;
         this.responseBean = responseBean;
         this.httpHeaders = httpHeaders;

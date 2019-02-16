@@ -7,8 +7,8 @@ import java.io.Serializable;
 
 public class ParticipantDto implements Serializable
 {
-    @Positive(groups = {RequestDataValidator.PutParticipant.class})
-    @NotNull(groups = {RequestDataValidator.PutParticipant.class})
+    @Positive(groups = {RequestDataValidator.PostParticipant.class})
+    @NotNull(groups = {RequestDataValidator.PostParticipant.class})
     private Integer presentationId;
 
     public Integer getPresentationId()

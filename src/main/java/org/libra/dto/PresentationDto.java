@@ -7,27 +7,27 @@ import java.util.Date;
 
 public class PresentationDto implements Serializable
 {
-    @Positive(groups = {RequestDataValidator.PatchPresentation.class})
-    @Null(groups = {RequestDataValidator.PutPresentation.class})
-    @NotNull(groups = {RequestDataValidator.PatchPresentation.class})
+    @Positive(groups = {RequestDataValidator.PutPresentation.class})
+    @Null(groups = {RequestDataValidator.PostPresentation.class})
+    @NotNull(groups = {RequestDataValidator.PutPresentation.class})
     private Integer id;
 
-    @Size(groups = {RequestDataValidator.PutPresentation.class, RequestDataValidator.PatchPresentation.class}, max = 255)
-    @NotBlank(groups = {RequestDataValidator.PutPresentation.class})
+    @Size(groups = {RequestDataValidator.PostPresentation.class, RequestDataValidator.PutPresentation.class}, max = 255)
+    @NotBlank(groups = {RequestDataValidator.PostPresentation.class})
     private String title;
 
-    @Size(groups = {RequestDataValidator.PutPresentation.class, RequestDataValidator.PatchPresentation.class}, max = 255)
-    @NotBlank(groups = {RequestDataValidator.PutPresentation.class})
+    @Size(groups = {RequestDataValidator.PostPresentation.class, RequestDataValidator.PutPresentation.class}, max = 255)
+    @NotBlank(groups = {RequestDataValidator.PostPresentation.class})
     private String description;
 
-    @NotNull(groups = {RequestDataValidator.PutPresentation.class})
+    @NotNull(groups = {RequestDataValidator.PostPresentation.class})
     private Date startDate;
 
-    @NotNull(groups = {RequestDataValidator.PutPresentation.class})
+    @NotNull(groups = {RequestDataValidator.PostPresentation.class})
     private Date endDate;
 
-    @Size(groups = {RequestDataValidator.PutPresentation.class, RequestDataValidator.PatchPresentation.class}, max = 255)
-    @NotBlank(groups = {RequestDataValidator.PutPresentation.class})
+    @Size(groups = {RequestDataValidator.PostPresentation.class, RequestDataValidator.PutPresentation.class}, max = 255)
+    @NotBlank(groups = {RequestDataValidator.PostPresentation.class})
     private String place;
 
     public Integer getId()

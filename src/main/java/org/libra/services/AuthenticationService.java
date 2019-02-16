@@ -1,8 +1,8 @@
 package org.libra.services;
 
 import org.libra.beans.ResponseBean;
-import org.libra.beans.utilities.AuthorityUtilityBean;
-import org.libra.beans.utilities.ServiceUtilityBean;
+import org.libra.beans.utilities.AuthorityUtility;
+import org.libra.beans.utilities.ServiceUtility;
 import org.libra.entities.implementation.UserAuthorityEntity;
 import org.libra.entities.implementation.UserEntity;
 import org.libra.exceptions.BadCredentialsException;
@@ -21,8 +21,8 @@ import java.util.Optional;
 @Service
 public class AuthenticationService
 {
-    private final AuthorityUtilityBean authorityUtilityBean;
-    private final ServiceUtilityBean serviceUtilityBean;
+    private final AuthorityUtility authorityUtility;
+    private final ServiceUtility serviceUtility;
     private final UserRepository userRepository;
     private final ResponseBean responseBean;
     private final HttpHeaders httpHeaders;
@@ -43,12 +43,12 @@ public class AuthenticationService
         return userEntity;
     }
 
-    public ResponseBean putAuthentication(UserEntity userEntity) throws Exception
+    public ResponseBean postAuthentication(UserEntity userEntity) throws Exception
     {
         Optional<UserEntity> optionalUserEntity = userRepository.findUserEntityByEmail(userEntity.getEmail());
         if (!optionalUserEntity.isPresent())
         {
-            userRepository.save(serviceUtilityBean.encodeUserEntityPassword(completeRegistrationObject(userEntity)));
+            userRepository.save(serviceUtility.encodeUserEntityPassword(completeRegistrationObject(userEntity)));
             responseBean.setStatus(HttpStatus.CREATED);
             responseBean.setHeaders(httpHeaders);
             responseBean.setResponse("User with email: '" + userEntity.getEmail() + "' successfully registered");
@@ -64,7 +64,7 @@ public class AuthenticationService
         ResponseEntity<?> responseEntity;
         if ((status != null) && (status.equals("success")))
         {
-            responseEntity = new ResponseEntity<>(userRepository.findUserEntityByEmail(authorityUtilityBean.getCurrentAuthenticationEmail()), httpHeaders, HttpStatus.OK);
+            responseEntity = new ResponseEntity<>(userRepository.findUserEntityByEmail(authorityUtility.getCurrentAuthenticationEmail()), httpHeaders, HttpStatus.OK);
         }
         else if ((status != null) && (status.equals("invalidAuthenticationData")))
         {
@@ -78,11 +78,11 @@ public class AuthenticationService
     }
 
     @Autowired
-    public AuthenticationService(AuthorityUtilityBean authorityUtilityBean, ServiceUtilityBean serviceUtilityBean,
+    public AuthenticationService(AuthorityUtility authorityUtility, ServiceUtility serviceUtility,
                                  UserRepository authenticationRepository, ResponseBean responseBean, HttpHeaders httpHeaders)
     {
-        this.authorityUtilityBean = authorityUtilityBean;
-        this.serviceUtilityBean = serviceUtilityBean;
+        this.authorityUtility = authorityUtility;
+        this.serviceUtility = serviceUtility;
         this.userRepository = authenticationRepository;
         this.responseBean = responseBean;
         this.httpHeaders = httpHeaders;

@@ -2,14 +2,14 @@ package org.libra.assets.validators;
 
 public class RequestDataValidator
 {
+    public interface PostUser {}
     public interface PutUser {}
-    public interface PatchUser {}
-    public interface PutUserAuthority {}
+    public interface PostUserAuthority {}
+    public interface PostPresentation {}
     public interface PutPresentation {}
-    public interface PatchPresentation {}
-    public interface PutMark {}
-    public interface PutParticipant {}
+    public interface PostMark {}
+    public interface PostParticipant {}
+    public interface PostMessage {}
     public interface PutMessage {}
-    public interface PatchMessage {}
-    public interface PutAuthentication {}
+    public interface PostAuthentication {}
 }

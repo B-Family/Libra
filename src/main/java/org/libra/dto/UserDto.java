@@ -8,23 +8,23 @@ import java.util.List;
 
 public class UserDto implements Serializable
 {
-    @Size(groups = {RequestDataValidator.PutUser.class, RequestDataValidator.PatchUser.class}, max = 255)
-    @Email(groups = {RequestDataValidator.PutUser.class, RequestDataValidator.PatchUser.class})
-    @NotBlank(groups = {RequestDataValidator.PutUser.class, RequestDataValidator.PatchUser.class})
+    @Size(groups = {RequestDataValidator.PostUser.class, RequestDataValidator.PutUser.class}, max = 255)
+    @Email(groups = {RequestDataValidator.PostUser.class, RequestDataValidator.PutUser.class})
+    @NotBlank(groups = {RequestDataValidator.PostUser.class, RequestDataValidator.PutUser.class})
     private String email;
 
-    @Size(groups = {RequestDataValidator.PutUser.class, RequestDataValidator.PatchUser.class}, min = 6, max = 16)
-    @NotNull(groups = {RequestDataValidator.PutUser.class})
+    @Size(groups = {RequestDataValidator.PostUser.class, RequestDataValidator.PutUser.class}, min = 6, max = 16)
+    @NotNull(groups = {RequestDataValidator.PostUser.class})
     private String password;
 
-    @PositiveOrZero(groups = {RequestDataValidator.PutUser.class, RequestDataValidator.PatchUser.class})
-    @Max(groups = {RequestDataValidator.PutUser.class, RequestDataValidator.PatchUser.class}, value = 1)
-    @NotNull(groups = {RequestDataValidator.PutUser.class})
+    @PositiveOrZero(groups = {RequestDataValidator.PostUser.class, RequestDataValidator.PutUser.class})
+    @Max(groups = {RequestDataValidator.PostUser.class, RequestDataValidator.PutUser.class}, value = 1)
+    @NotNull(groups = {RequestDataValidator.PostUser.class})
     private Integer enabled;
 
     @Valid
-    @Null(groups = {RequestDataValidator.PatchUser.class})
-    @NotEmpty(groups = {RequestDataValidator.PutUser.class})
+    @Null(groups = {RequestDataValidator.PutUser.class})
+    @NotEmpty(groups = {RequestDataValidator.PostUser.class})
     private List<UserAuthorityDto> authorities;
 
     public String getEmail()

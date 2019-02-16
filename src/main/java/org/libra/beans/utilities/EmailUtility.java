@@ -8,7 +8,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
 @Component
-public class EmailUtilityBean
+public class EmailUtility
 {
     private final JavaMailSender javaMailSender;
 
@@ -33,7 +33,7 @@ public class EmailUtilityBean
     }
 
     @Autowired
-    public EmailUtilityBean(JavaMailSender javaMailSender)
+    public EmailUtility(JavaMailSender javaMailSender)
     {
         this.javaMailSender = javaMailSender;
     }

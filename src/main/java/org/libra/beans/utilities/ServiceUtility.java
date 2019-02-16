@@ -8,10 +8,10 @@ import org.springframework.stereotype.Component;
 import java.lang.reflect.Method;
 
 @Component
-public class ServiceUtilityBean
+public class ServiceUtility
 {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final AuthorityUtilityBean authorityUtilityBean;
+    private final AuthorityUtility authorityUtility;
 
     public UserEntity encodeUserEntityPassword(UserEntity userEntity)
     {
@@ -23,7 +23,7 @@ public class ServiceUtilityBean
     }
     public <T extends Entities> T setAuthenticatedEmailPropertyValue(T targetEntity) throws Exception
     {
-        targetEntity.getClass().getMethod("setEmail", String.class).invoke(targetEntity, authorityUtilityBean.getCurrentAuthenticationEmail());
+        targetEntity.getClass().getMethod("setEmail", String.class).invoke(targetEntity, authorityUtility.getCurrentAuthenticationEmail());
         return targetEntity;
     }
     public <T extends Entities> T patchEntity(T targetEntity, T patchingEntity) throws Exception
@@ -48,9 +48,9 @@ public class ServiceUtilityBean
     }
 
     @Autowired
-    public ServiceUtilityBean(BCryptPasswordEncoder bCryptPasswordEncoder, AuthorityUtilityBean authorityUtilityBean)
+    public ServiceUtility(BCryptPasswordEncoder bCryptPasswordEncoder, AuthorityUtility authorityUtility)
     {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-        this.authorityUtilityBean = authorityUtilityBean;
+        this.authorityUtility = authorityUtility;
     }
 }

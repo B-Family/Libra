@@ -1,8 +1,8 @@
 package org.libra.services;
 
-import org.libra.beans.utilities.AuthorityUtilityBean;
+import org.libra.beans.utilities.AuthorityUtility;
 import org.libra.beans.ResponseBean;
-import org.libra.beans.utilities.ServiceUtilityBean;
+import org.libra.beans.utilities.ServiceUtility;
 import org.libra.entities.implementation.MessageEntity;
 import org.libra.entities.implementation.PresentationEntity;
 import org.libra.exceptions.AccessDeniedException;
@@ -18,8 +18,8 @@ import java.util.Optional;
 @Service
 public class MessageService
 {
-    private final AuthorityUtilityBean authorityUtilityBean;
-    private final ServiceUtilityBean serviceUtilityBean;
+    private final AuthorityUtility authorityUtility;
+    private final ServiceUtility serviceUtility;
     private final PresentationRepository presentationRepository;
     private final MessageRepository messageRepository;
     private final ResponseBean responseBean;
@@ -33,12 +33,12 @@ public class MessageService
         }
         else
         {
-            targetEntity.setEmail(authorityUtilityBean.getCurrentAuthenticationEmail());
+            targetEntity.setEmail(authorityUtility.getCurrentAuthenticationEmail());
         }
         return targetEntity;
     }
 
-    public ResponseBean putMessage(MessageEntity messageEntity) throws Exception
+    public ResponseBean postMessage(MessageEntity messageEntity) throws Exception
     {
 
         Optional<PresentationEntity> optionalPresentationEntity = presentationRepository
@@ -56,16 +56,16 @@ public class MessageService
         }
         return responseBean;
     }
-    public ResponseBean patchMessage(MessageEntity messageEntity) throws Exception
+    public ResponseBean putMessage(MessageEntity messageEntity) throws Exception
     {
         Optional<MessageEntity> optionalMessageEntity = messageRepository.findMessageEntityById(messageEntity.getId());
         if (optionalMessageEntity.isPresent())
         {
-            if (authorityUtilityBean.getCurrentAuthenticationEmail().equals(optionalMessageEntity.get().getEmail()))
+            if (authorityUtility.getCurrentAuthenticationEmail().equals(optionalMessageEntity.get().getEmail()))
             {
-                messageRepository.save(serviceUtilityBean.patchEntity(optionalMessageEntity.get(), messageEntity));
+                messageRepository.save(serviceUtility.patchEntity(optionalMessageEntity.get(), messageEntity));
                 responseBean.setHeaders(httpHeaders);
-                responseBean.setResponse("Message with id: '" + messageEntity.getId() + "' successfully patched");
+                responseBean.setResponse("Message with id: '" + messageEntity.getId() + "' successfully modified");
             }
             else
             {
@@ -83,8 +83,8 @@ public class MessageService
         Optional<MessageEntity> optionalMessageEntity = messageRepository.findMessageEntityById(id);
         if (optionalMessageEntity.isPresent())
         {
-            if (authorityUtilityBean.getCurrentAuthenticationEmail().equals(optionalMessageEntity.get().getEmail())
-                    || authorityUtilityBean.validateAdminAuthority())
+            if (authorityUtility.getCurrentAuthenticationEmail().equals(optionalMessageEntity.get().getEmail())
+                    || authorityUtility.validateAdminAuthority())
             {
                 messageRepository.deleteMessageEntityById(id);
                 responseBean.setHeaders(httpHeaders);
@@ -104,12 +104,12 @@ public class MessageService
     }
 
     @Autowired
-    public MessageService(AuthorityUtilityBean authorityUtilityBean, ServiceUtilityBean serviceUtilityBean,
+    public MessageService(AuthorityUtility authorityUtility, ServiceUtility serviceUtility,
                           PresentationRepository presentationRepository, MessageRepository messageRepository,
                           ResponseBean responseBean, HttpHeaders httpHeaders)
     {
-        this.authorityUtilityBean = authorityUtilityBean;
-        this.serviceUtilityBean = serviceUtilityBean;
+        this.authorityUtility = authorityUtility;
+        this.serviceUtility = serviceUtility;
         this.presentationRepository = presentationRepository;
         this.messageRepository = messageRepository;
         this.responseBean = responseBean;

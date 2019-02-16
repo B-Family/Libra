@@ -6,27 +6,27 @@ import java.io.Serializable;
 
 public class MessageDto implements Serializable
 {
-    @Positive(groups = {RequestDataValidator.PatchMessage.class})
-    @Null(groups = {RequestDataValidator.PutMessage.class})
-    @NotNull(groups = {RequestDataValidator.PatchMessage.class})
+    @Positive(groups = {RequestDataValidator.PutMessage.class})
+    @Null(groups = {RequestDataValidator.PostMessage.class})
+    @NotNull(groups = {RequestDataValidator.PutMessage.class})
     private Integer id;
 
-    @Positive(groups = {RequestDataValidator.PutMessage.class})
-    @Null(groups = {RequestDataValidator.PatchMessage.class})
-    @NotNull(groups = {RequestDataValidator.PutMessage.class})
+    @Positive(groups = {RequestDataValidator.PostMessage.class})
+    @Null(groups = {RequestDataValidator.PutMessage.class})
+    @NotNull(groups = {RequestDataValidator.PostMessage.class})
     private Integer presentationId;
 
-    @Size(groups = {RequestDataValidator.PutMessage.class, RequestDataValidator.PatchMessage.class}, max = 255)
-    @NotBlank(groups = {RequestDataValidator.PutMessage.class})
+    @Size(groups = {RequestDataValidator.PostMessage.class, RequestDataValidator.PutMessage.class}, max = 255)
+    @NotBlank(groups = {RequestDataValidator.PostMessage.class})
     private String message;
 
-    @Size(groups = {RequestDataValidator.PutMessage.class, RequestDataValidator.PatchMessage.class}, max = 255)
-    @Pattern(groups = {RequestDataValidator.PutMessage.class, RequestDataValidator.PatchMessage.class}, regexp = "TYPE_FEEDBACK|TYPE_QUESTION")
-    @NotBlank(groups = {RequestDataValidator.PutMessage.class})
+    @Size(groups = {RequestDataValidator.PostMessage.class, RequestDataValidator.PutMessage.class}, max = 255)
+    @Pattern(groups = {RequestDataValidator.PostMessage.class, RequestDataValidator.PutMessage.class}, regexp = "TYPE_FEEDBACK|TYPE_QUESTION")
+    @NotBlank(groups = {RequestDataValidator.PostMessage.class})
     private String type;
 
-    @Null(groups = {RequestDataValidator.PatchMessage.class})
-    @NotNull(groups = {RequestDataValidator.PutMessage.class})
+    @Null(groups = {RequestDataValidator.PutMessage.class})
+    @NotNull(groups = {RequestDataValidator.PostMessage.class})
     private Boolean isAnonymous;
 
     public Integer getId()

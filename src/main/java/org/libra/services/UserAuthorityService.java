@@ -1,6 +1,6 @@
 package org.libra.services;
 
-import org.libra.beans.utilities.AuthorityUtilityBean;
+import org.libra.beans.utilities.AuthorityUtility;
 import org.libra.beans.ResponseBean;
 import org.libra.entities.implementation.UserAuthorityEntity;
 import org.libra.entities.implementation.UserEntity;
@@ -17,13 +17,13 @@ import java.util.Optional;
 @Service
 public class UserAuthorityService
 {
-    private final AuthorityUtilityBean authorityUtilityBean;
+    private final AuthorityUtility authorityUtility;
     private final UserRepository userRepository;
     private final UserAuthorityRepository userAuthorityRepository;
     private final ResponseBean responseBean;
     private final HttpHeaders httpHeaders;
 
-    public ResponseBean putUserAuthority(UserAuthorityEntity userAuthorityEntity) throws Exception
+    public ResponseBean postUserAuthority(UserAuthorityEntity userAuthorityEntity) throws Exception
     {
         Optional<UserEntity> optionalUserEntity = userRepository.findUserEntityByEmail(userAuthorityEntity.getEmail());
         if (optionalUserEntity.isPresent())
@@ -32,7 +32,7 @@ public class UserAuthorityService
                     .findUserAuthorityEntityByEmailAndAuthority(userAuthorityEntity.getEmail(), userAuthorityEntity.getAuthority());
             if (!optionalUserAuthorityEntity.isPresent())
             {
-                if (authorityUtilityBean.validateAdminAuthority())
+                if (authorityUtility.validateAdminAuthority())
                 {
                     userAuthorityRepository.save(userAuthorityEntity);
                     responseBean.setHeaders(httpHeaders);
@@ -62,8 +62,8 @@ public class UserAuthorityService
         Optional<UserAuthorityEntity> optionalUserAuthorityEntity = userAuthorityRepository.findUserAuthorityEntityById(id);
         if (optionalUserAuthorityEntity.isPresent())
         {
-            if ((!authorityUtilityBean.getCurrentAuthenticationEmail().equals(optionalUserAuthorityEntity.get().getEmail())
-                    || !optionalUserAuthorityEntity.get().getAuthority().equals("ROLE_ADMIN")) && authorityUtilityBean.validateAdminAuthority())
+            if ((!authorityUtility.getCurrentAuthenticationEmail().equals(optionalUserAuthorityEntity.get().getEmail())
+                    || !optionalUserAuthorityEntity.get().getAuthority().equals("ROLE_ADMIN")) && authorityUtility.validateAdminAuthority())
             {
                 Optional<List<UserAuthorityEntity>> optionalUserAuthorityEntityList = userAuthorityRepository
                         .findUserAuthorityEntityByEmail(optionalUserAuthorityEntity.get().getEmail());
@@ -79,8 +79,8 @@ public class UserAuthorityService
                     throw new DeleteLastAuthorityException("You cannot delete user's last authority");
                 }
             }
-            else if ((authorityUtilityBean.getCurrentAuthenticationEmail().equals(optionalUserAuthorityEntity.get().getEmail())
-                    && optionalUserAuthorityEntity.get().getAuthority().equals("ROLE_ADMIN")) && authorityUtilityBean.validateAdminAuthority())
+            else if ((authorityUtility.getCurrentAuthenticationEmail().equals(optionalUserAuthorityEntity.get().getEmail())
+                    && optionalUserAuthorityEntity.get().getAuthority().equals("ROLE_ADMIN")) && authorityUtility.validateAdminAuthority())
             {
                 throw new SelfDestructionException("You cannot deactivate admin rights yourself");
             }
@@ -97,11 +97,11 @@ public class UserAuthorityService
     }
 
     @Autowired
-    public UserAuthorityService(AuthorityUtilityBean authorityUtilityBean, UserRepository userRepository,
+    public UserAuthorityService(AuthorityUtility authorityUtility, UserRepository userRepository,
                                 UserAuthorityRepository userAuthorityRepository, ResponseBean responseBean,
                                 HttpHeaders httpHeaders)
     {
-        this.authorityUtilityBean = authorityUtilityBean;
+        this.authorityUtility = authorityUtility;
         this.userRepository = userRepository;
         this.userAuthorityRepository = userAuthorityRepository;
         this.responseBean = responseBean;
