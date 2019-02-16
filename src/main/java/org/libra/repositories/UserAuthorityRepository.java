@@ -1,0 +1,22 @@
+package org.libra.repositories;
+
+import org.libra.entities.implementation.UserAuthorityEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+public interface UserAuthorityRepository extends JpaRepository<UserAuthorityEntity, Integer>
+{
+    Optional<List<UserAuthorityEntity>> findUserAuthorityEntityByEmail(String email);
+
+    Optional<UserAuthorityEntity> findUserAuthorityEntityByEmailAndAuthority(String email, String authority);
+    Optional<UserAuthorityEntity> findUserAuthorityEntityById(Integer id);
+
+    @Modifying
+    @Transactional
+    void deleteUserAuthorityEntityById(Integer authorityId);
+}
