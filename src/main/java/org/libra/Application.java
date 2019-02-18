@@ -7,10 +7,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @EnableJpaRepositories
 @SpringBootApplication(scanBasePackages = "org.libra.*")
-public class Libra extends SpringBootServletInitializer
+public class Application extends SpringBootServletInitializer
 {
     public static void main(String[] args)
     {
-        SpringApplication.run(Libra.class, args);
+        SpringApplication.run(Application.class, args);
     }
 }

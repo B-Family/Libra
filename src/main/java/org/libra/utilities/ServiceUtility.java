@@ -1,4 +1,4 @@
-package org.libra.beans.utilities;
+package org.libra.utilities;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import org.libra.entities.Entities;

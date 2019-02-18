@@ -31,8 +31,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
         http.csrf()
                 .disable();
         http.authorizeRequests()
-                .antMatchers("/VAADIN/**", "/frontend/**", "/").hasAuthority("ROLE_ANONYMOUS")
-                .anyRequest().authenticated();
+                .antMatchers("/VAADIN/**", "/frontend/**", "/").permitAll()
+                .anyRequest().permitAll();
         http.formLogin()
                 .loginPage("/authentication").permitAll();
         http.logout()

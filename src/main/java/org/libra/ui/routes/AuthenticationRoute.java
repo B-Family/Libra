@@ -10,7 +10,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
-import org.libra.beans.utilities.AuthorityUtility;
+import org.libra.utilities.AuthorityUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 
@@ -23,9 +23,9 @@ public class AuthenticationRoute extends HorizontalLayout
 
     private void init()
     {
-        add(buildLOginOverlay());
+        add(buildLoginOverlay());
     }
-    private LoginOverlay buildLOginOverlay()
+    private LoginOverlay buildLoginOverlay()
     {
         LoginOverlay loginOverlay = new LoginOverlay();
         loginOverlay.setTitle(buildTitle());
@@ -62,7 +62,7 @@ public class AuthenticationRoute extends HorizontalLayout
         try
         {
             authorityUtility.authenticate(loginEvent.getUsername(), loginEvent.getPassword());
-            loginEvent.getSource().getUI().ifPresent(ui -> ui.navigate("presentation"));
+            loginEvent.getSource().getUI().ifPresent(ui -> ui.navigate(""));
         }
         catch (BadCredentialsException e)
         {

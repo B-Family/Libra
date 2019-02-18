@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @UIScope
 @SpringComponent
-@Route(value = "presentation")
-public class PresentationRoute extends HorizontalLayout
+@Route(value = "profile")
+public class ProfileRoute extends HorizontalLayout
 {
     private final RouteUtility routeUtility;
 
@@ -25,7 +25,7 @@ public class PresentationRoute extends HorizontalLayout
     }
 
     @Autowired
-    public PresentationRoute(RouteUtility routeUtility)
+    public ProfileRoute(RouteUtility routeUtility)
     {
         this.routeUtility = routeUtility;
         init();
