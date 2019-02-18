@@ -1,13 +1,13 @@
 package org.libra.beans.utilities;
 
+import com.vaadin.flow.spring.annotation.SpringComponent;
 import org.libra.entities.implementation.ParticipantEntity;
 import org.libra.entities.implementation.PresentationEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.stereotype.Component;
 
-@Component
+@SpringComponent
 public class EmailUtility
 {
     private final JavaMailSender javaMailSender;

@@ -1,11 +1,11 @@
 package org.libra.beans;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.vaadin.flow.spring.annotation.SpringComponent;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
 
-@Component
+@SpringComponent
 public class ResponseBean
 {
     @JsonIgnore

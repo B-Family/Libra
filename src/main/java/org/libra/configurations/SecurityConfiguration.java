@@ -2,7 +2,9 @@ package org.libra.configurations;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -24,6 +26,22 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
     private String authoritiesQuery;
 
     @Override
+    protected void configure(HttpSecurity http) throws Exception
+    {
+        http.csrf()
+                .disable();
+        http.authorizeRequests()
+                .antMatchers("/VAADIN/**", "/frontend/**", "/").hasAuthority("ROLE_ANONYMOUS")
+                .anyRequest().authenticated();
+        http.formLogin()
+                .loginPage("/authentication").permitAll();
+        http.logout()
+                .logoutUrl("/logout")
+                .deleteCookies("JSESSIONID")
+                .logoutSuccessUrl("/authentication");
+    }
+
+    @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception
     {
         auth.jdbcAuthentication()
@@ -33,28 +51,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
                 .passwordEncoder(bCryptPasswordEncoder);
     }
 
+    @Bean
     @Override
-    protected void configure(HttpSecurity http) throws Exception
+    public AuthenticationManager authenticationManagerBean() throws Exception
     {
-        http.authorizeRequests()
-                .antMatchers("/authentication").hasAuthority("ROLE_ANONYMOUS")
-                .antMatchers("/authentication/invalid").hasAuthority("ROLE_ANONYMOUS")
-                .antMatchers("/api/presentation").permitAll()
-                .antMatchers("/api/presentation/**").permitAll()
-                .anyRequest().authenticated();
-        http.csrf()
-                .disable();
-        http.formLogin()
-                .loginPage("/authentication")
-                .loginProcessingUrl("/authentication")
-                .usernameParameter("email")
-                .defaultSuccessUrl("/authentication/success", true)
-                .failureUrl("/authentication/invalid")
-                .permitAll();
-        http.logout()
-                .logoutUrl("/logout")
-                .deleteCookies("JSESSIONID")
-                .logoutSuccessUrl("/authentication");
+        return super.authenticationManagerBean();
     }
 
     @Autowired

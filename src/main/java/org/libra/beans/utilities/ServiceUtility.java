@@ -1,13 +1,13 @@
 package org.libra.beans.utilities;
 
+import com.vaadin.flow.spring.annotation.SpringComponent;
 import org.libra.entities.Entities;
 import org.libra.entities.implementation.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Component;
 import java.lang.reflect.Method;
 
-@Component
+@SpringComponent
 public class ServiceUtility
 {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
