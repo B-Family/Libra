@@ -1,2 +1,2 @@
 # Libra
-Temporal repository for application that managing presentations
+Application in development
